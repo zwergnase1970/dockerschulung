@@ -291,3 +291,21 @@ echo "Hallo Welt";
 
 ```
 
+---
+
+![bg left:25% 80%](docker.png)
+
+## **Lösung:** </br> Ein php Image erstellen und veröffentlichen
+
+
+```docker
+
+# Verwende den offiziellen PHP-Basisimage mit Apache-Server
+FROM php:7.4-apache
+
+# Kopiere die Dateien deines PHP-Projekts in das Containerverzeichnis /var/www/html
+COPY src/* /var/www/html/
+
+
+```
+
