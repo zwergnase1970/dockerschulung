@@ -90,6 +90,36 @@ wsl --install
 
 ---
 
+![bg right:25% 96%](vscode.png)
+
+## VS Code (Docker extension)
+
+VS Code ist ein kostenloser plattformunabhängiger Editor von Microsoft, der mittels Extensions umfangreich erweitert werden kann.
+
+Die Docker Extension für VS Code unterstützt den Entwickler bei allen notwendigen Arbeiten mit Docker.
+
+---
+![bg left:25% 80%](docker.png)
+
+## Play with Docker
+
+![Play With Docker](pwd.png)
+
+
+[https://labs.play-with-docker.com/](https://labs.play-with-docker.com/)
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## Codespace
+
+![Codespace](codespace.png)
+
+[https://github.com/codespaces/new?hide_repo_select=true&ref=master&repo=695430178&skip_quickstart=true](https://github.com/codespaces/new?hide_repo_select=true&ref=master&repo=695430178&skip_quickstart=true)
+
+---
+
 ![bg right:25% 80%](docker.png)
 
 ## Images und Container
@@ -249,7 +279,27 @@ Durch den Aufruf von *http://localhost:88* sollte der Webserver erreichbar sein.
 
 ---
 
+![bg left:25% 80%](docker.png)
+
+## Mit Containers verbinden
+
+Verbinden mit STD-Out des Containers:
+
+```docker
+docker attach {id}
+```
+
+Starten von BASH:
+
+```docker
+docker exec -it <mycontainer> bash
+```
+
+
+---
+
 ![bg right:25% 80%](docker.png)
+
 
 ## Ein Image speichern / veröffentlichen (1)
 
@@ -309,3 +359,91 @@ COPY src/* /var/www/html/
 
 ```
 
+---
+
+![bg right:25% 80%](docker.png)
+
+## Einen MySQL Server erstellen
+
+Das folgende Dockerfile erstellt ein neues MYsql Image, vergibt Benutzer-Credentials und legt eine Datenbank **DB.sql** an. 
+
+```docker
+FROM mysql:latest
+ENV MYSQL_DATABASE=verkauf
+ENV MYSQL_USER=user
+ENV MYSQL_PASSWORD=geheim
+ENV MYSQL_ROOT_PASSWORD=geheim
+COPY DB.sql /docker-entrypoint-initdb.d/
+```
+
+Starten des Containers via:
+
+```docker
+docker run -d -p 3306:3306 {Name des Images}
+```
+
+---
+
+![bg right:25% 80%](docker.png)
+
+## Verbinden mit dem MySQL Server
+
+Anschließend kann man sich mit dem MySQL Server verbinden. Der Server ist über **localhost** zu erreichen und der Benutzername lautet **user** und das Kennwort **geheim**, der Name der  Datenbank lauten **verkauf**.
+
+Idealer Weise verwendet man dazu eine MySql Extension von VS Code.
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## Volumes (1)
+
+Ergänzen Sie das Docker File um folgende Anweisung.
+
+```docker
+VOLUME /var/lib/mysql
+
+```
+
+Damit wichtige Daten (wie z.B. die einer Datenbank) erhalten bleiben, müssen sie außerhalb des Containers geladen werden. Dazu dienen **Volumes** auf dem Docker-Host. 
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## Volumes (2)
+
+Auf dem Host kann ein Volume wie folgt erzeugt werden.
+
+```docker
+docker volume create {volumename}
+```
+
+Anschließend kann der Docker Container wie folgt gestartet werden:
+
+```docker
+docker run -d -p 3306:3306 -v {volumename}:/var/lib/mysql {Name des Images}
+```
+---
+
+![bg left:25% 80%](docker.png)
+
+## Volumes (3)
+
+Alle Volumes des Host können wie folgt abgefragt werden:
+
+```docker
+docker volume ls
+```
+
+Der Speicherort des Volumes kann wie folgt abgefragt werden: 
+
+```docker
+docker volume inspect {volumename}
+```
+
+Ein Volume löschen geht wir folgt:
+
+```docker
+docker volume rm {volumename}
+```
