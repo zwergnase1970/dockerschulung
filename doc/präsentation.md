@@ -217,6 +217,15 @@ docker run -p 88:80 -d --name wp wordpress
 
 ![bg left:25% 80%](docker.png)
 
+## Einen "Klassensatz" Container erstellen
+
+
+![Klassensatz](linux.png)
+
+---
+
+![bg left:25% 80%](docker.png)
+
 ## Ein eigenes Image bauen (1)
 
 Im folgenden soll eine Webseite (im Verzeichnis **html**) durch einen eigenen Docker Container ausgeliefert werden.
