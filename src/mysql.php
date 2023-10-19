@@ -1,6 +1,6 @@
 <?php
 // Datenbankverbindung herstellen
-$servername = "mysql-container";
+$servername = "mysql";
 $username = "user";
 $password = "geheim";
 $dbname = "verkauf";
