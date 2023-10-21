@@ -1,5 +1,5 @@
 {
     "editor.fontSize": 14,
-    "workbench.iconTheme": "material-icon-theme",
+    "workbench.iconTheme": "vs-seti",
     "python.defaultInterpreterPath": "/usr/local/bin/python",
 }
