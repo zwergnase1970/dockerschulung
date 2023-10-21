@@ -37,8 +37,9 @@
                 "redhat.vscode-yaml",
                 "ms-azuretools.vscode-docker",
                 "humao.rest-client",
-                "formulahendry.vscode-mysql",
-                "DEVSENSE.phptools-vscode"
+                "cweijan.vscode-mysql-client2",
+                "DEVSENSE.phptools-vscode",
+                "marp-team.marp-vscode"
             ]
         }
     },

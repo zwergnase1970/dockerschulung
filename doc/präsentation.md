@@ -217,6 +217,15 @@ docker run -p 88:80 -d --name wp wordpress
 
 ![bg left:25% 80%](docker.png)
 
+## Einen "Klassensatz" Container erstellen
+
+
+![Klassensatz](linux.png)
+
+---
+
+![bg left:25% 80%](docker.png)
+
 ## Ein eigenes Image bauen (1)
 
 Im folgenden soll eine Webseite (im Verzeichnis **html**) durch einen eigenen Docker Container ausgeliefert werden.
@@ -424,6 +433,7 @@ Anschließend kann der Docker Container wie folgt gestartet werden:
 ```docker
 docker run -d -p 3306:3306 -v {volumename}:/var/lib/mysql {Name des Images}
 ```
+
 ---
 
 ![bg left:25% 80%](docker.png)
@@ -447,3 +457,230 @@ Ein Volume löschen geht wir folgt:
 ```docker
 docker volume rm {volumename}
 ```
+---
+
+![bg right:25% 80%](docker.png)
+
+## Docker Container verbinden (1)
+
+Im folgenden wollen wir die mysql Datenbank mit einer PHP Anwendung (**in src/mysql.php**) verbinden.
+
+![Netzwerk1](mysql_php.drawio.png)
+
+Dazu muss die PHP Anwendung angepasst werden.
+
+```php
+<?php
+// Datenbankverbindung herstellen
+$servername = "{IP Adresse des Docker Host}";
+```
+
+---
+
+![bg right:25% 80%](docker.png)
+
+## Docker Container verbinden (2)
+
+Für die PHP Anwendung muss zudem noch die MYSQL Module installiert werden. Das Dockerfile sieht nun wie folgt aus:
+
+```docker
+FROM php:7.4-apache
+
+# Installiere die MySQLi-Erweiterung
+RUN docker-php-ext-install mysqli
+
+COPY src/* /var/www/html/
+```
+
+
+Starten der Docker Container:
+
+```docker
+docker run -d -p 3306:3306 mysqldockerschulung
+docker run -d -p 80:80 dockerschulungphp
+```
+
+---
+
+![bg right:25% 80%](docker.png)
+
+## Docker Container verbinden (3)
+
+Wenn beide Container laufen, sollte die PHP Anwendung über **<http://localhost/mysql.php>** auszuführen sein und der Inhalt der Datenbank angezeigt werden.
+
+![Netzwerk1](mysql_php.drawio.png)
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## Docker Netzwerke (1)
+
+Docker bietet auch die Möglichkeit Subnetze zu bilden. Die Container in einem Subnetz werden dabei über ihren Namen angesprochen (eigenes DNS im Subnetz). Die folgende Anweisung erstellt ein Netzwerk mit dem Namen "mynetwork".
+
+```docker
+docker network create mynetwork
+```
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## Docker Netzwerke (2)
+
+Ähnlich wie Volumes können auch Netzwerke abgefragt und gelöscht werden. 
+
+```docker
+docker network ls
+```
+
+Weitere Informationen zu dem Netzwerk erhält man über: 
+
+```docker
+docker network inspect {networkname}
+```
+
+Ein Netzwerk löschen geht wir folgt:
+
+```docker
+docker network rm {networkname}
+```
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## Docker Netzwerke (3)
+
+Im folgenden wollen wir unsere PHP Anwendung mit der mysql Datenbank über ein Docker Netzwerk kommunizieren lassen.
+
+![Netzwerk2](mysql_php2.drawio.png)
+
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## Docker Netzwerke (4)
+
+Dazu ist der mysql Container wie folgt zu starten:
+
+```docker
+docker run -d --network=mynetwork --name=mysql mysqldockerschulung
+
+```
+
+Und die PHP Anwendung muss angpasst werden, da die Datenbank nun nicht mehr über die IP Adresse des Hosts zu erreichen ist.
+
+```php
+<?php
+// Datenbankverbindung herstellen
+$servername = "mysql";
+```
+---
+
+![bg left:25% 80%](docker.png)
+
+## Docker Netzwerke (5)
+
+Nach dem Neuerstellen des Images kann der Container für die PHP Anwendung wie folgt gestartet werden:
+
+```docker
+docker run -d -p 80:80 --network=mynetwork --name=php dockerschulungphp
+
+```
+
+---
+
+![bg right:25% 80%](docker.png)
+
+## Orchestrierung über Docker-Compose (1)
+
+Um die PHP Anwendung bereitzustellen, müssen zwei Container gebaut und gestartet werden. Einfacher geschieht dieses über **docker-compose**. Dazu muss eine YML Datei **docker-compose.yml** erstellt werden mit folgenden Inhalt:
+
+---
+
+![bg right:25% 80%](docker.png)
+
+
+```yml
+version: '3'
+
+services:
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: mysql
+    networks:
+      - mynetwork
+
+  php-apache:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+
+```
+
+---
+
+![bg right:25% 80%](docker.png)
+
+## Orchestrierung über Docker-Compose (2)
+
+Beide Container können nun mit einer Anweisung gebaut und gestartet werden:
+
+```docker
+docker-compose up -d
+```
+
+Über...
+
+```docker
+docker-compose down
+```
+
+können beide Container wieder gestoppt und das Netzwerk gelöscht werden.
+
+---
+
+![bg right:25% 80%](docker.png)
+
+## Orchestrierung über Docker-Compose (3)
+
+Die PHP Anwendung läuft jedoch erst zufriedenstellend, wenn der Container für die Datenbank läuft. Diese Abhängigkeit lässt sich auch im **docker-compose.yml** File formulieren:
+
+```yml
+  # [..]
+  mysql:
+    # [..]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p geheim"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    networks:
+      - mynetwork
+
+  php-apache:
+    # [..]
+    depends_on:
+      mysql:
+        condition: service_healthy
+# [..]
+```
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## DevContainer im ci/cd Context (1)
+
+   
