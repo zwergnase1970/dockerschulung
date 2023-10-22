@@ -20,7 +20,7 @@ header :  "Anwendungsvirtualisierung mit Docker"
 
 ![bg left:25% 80%](docker.png)
 
-# Kurzvorstellung (wer / woher)
+# Kurzvorstellung 
 
 - Was ist meine Motivation an der Veranstaltung teilzunehmen?
 - Dieses wird eine gute Veranstaltung wenn ....
@@ -683,4 +683,50 @@ Die PHP Anwendung läuft jedoch erst zufriedenstellend, wenn der Container für 
 
 ## DevContainer im ci/cd Context (1)
 
-   
+Im CI/CD Ccontext werden Docker Container genutzt um die Anwendung zu *bauen*. Anschließend wird der Container wieder beendet.
+
+![DevContainer1](github2.png)
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## DevContainer im ci/cd Context (2)
+
+Bei github erfolgt die Configuration der Pipeline über eine oder mehrere *yml* Dateien im Ordner *.github/workflows*.
+
+Die Pipeline wird dabei gegliedert in einzelne **jobs**, die wiederum aus unterschiedlichen **steps** bestehen.
+
+Über den [Github Market Place](https://github.com/marketplace?type=actions) können bereits ein Vielzahl vorkonfigurierter **actions** genutzt werden.
+
+
+
+---
+
+![bg left:25% 80%](docker.png)
+
+## DevContainer im ci/cd Context (3)
+
+Werden Credentials in einem Workflow benötigt, so können diese bei github als Secrets in den Repository Einstellungen eingefügt werden (über Settings/Action Secrets and Variables/ Repository Secrets ).
+
+Anschießend können diese Variablen im YML File wie folgt genutzt werden.
+
+```yml
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+```
+
+---
+
+![bg right:25% 80%](lehrer.png)
+
+## Die Eigene Lernsituation
+
+Nun wird es Zeit das gelernte auch im Rahmen einer Lernsituation anzuwenden.
+
+> Setzen Sie sich in kleinen Gruppen zusammen und planen Sie eine Lernsituation zur **Anwendungsvirtualisierung mit Docker** und stellen diese im Anschluss kurs vor.
