@@ -5,22 +5,12 @@
     // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
     "image": "mcr.microsoft.com/devcontainers/base:jammy",
     "features": {
-        "ghcr.io/devcontainers/features/azure-cli:1": {
-            "version": "latest"
-        },
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {
-            "moby": true,
-            "azureDnsAutoDetection": true,
-            "installDockerBuildx": true,
-            "version": "latest",
-            "dockerDashComposeVersion": "none"
-        },
-        "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+        "ghcr.io/devcontainers/features/azure-cli:latest": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:latest": {},
+        "ghcr.io/rocker-org/devcontainer-features/apt-packages:latest": {
             "packages": "mc"
         },
-        "ghcr.io/devcontainers-contrib/features/powershell:1": {
-            "version": "latest"
-        }
+        "ghcr.io/devcontainers-contrib/features/powershell:latest": {}
     },
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
