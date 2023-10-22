@@ -29,7 +29,8 @@
                 "humao.rest-client",
                 "cweijan.vscode-mysql-client2",
                 "DEVSENSE.phptools-vscode",
-                "marp-team.marp-vscode"
+                "marp-team.marp-vscode",
+                "ms-vscode.powershell"
             ]
         }
     },
