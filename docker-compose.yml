@@ -6,11 +6,6 @@ services:
       context: ./mysql
       dockerfile: Dockerfile
     container_name: mysql-container
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p geheim"]
-      interval: 10s
-      timeout: 5s
-      retries: 6
     networks:
       - mynetwork
 
@@ -20,9 +15,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 80:80
-    depends_on:
-      mysql:
-        condition: service_healthy
     networks:
       - mynetwork
 
