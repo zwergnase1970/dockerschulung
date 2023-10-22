@@ -2,5 +2,5 @@
     "editor.fontSize": 14,
     "workbench.iconTheme": "vs-seti",
     "python.defaultInterpreterPath": "/usr/local/bin/python",
-    "workbench.colorTheme": "Moonlight II"
+    "workbench.colorTheme": "Monokai"
 }
