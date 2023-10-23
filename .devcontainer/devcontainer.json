@@ -13,7 +13,12 @@
         "ghcr.io/devcontainers-contrib/features/powershell:latest": {}
     },
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    // "forwardPorts": [],
+    "forwardPorts": [
+        1234,
+        3000,
+        3001,
+        8080
+    ],
     // Use 'postCreateCommand' to run commands after the container is created.
     // "postCreateCommand": "uname -a",
     // Configure tool-specific properties.
